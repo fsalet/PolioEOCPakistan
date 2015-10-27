@@ -177,7 +177,10 @@
 	  sublayers: [{
 		sql: "SELECT * FROM pcm_oct_mapping_cartotable",
 		cartocss: '#pcm_oct_mapping_cartotable{  polygon-fill: #d3ccc8;  polygon-opacity: 0.7;  line-color: #FFF;  line-width: 0.5;  line-opacity: 1;}'
-	    }]
+	    },{
+		sql: "SELECT * FROM pak_adm1_eoc_20151021",
+		cartocss: '#pak_adm1_eoc_20151021{  polygon-fill: #FF6600;  polygon-opacity: 0;  line-color: #5e3a02;  line-width: 2;  line-opacity: 1;}#pak_adm1_eoc_20151021::labels {  text-name: [province];  text-face-name: "DejaVu Sans Book";  text-size: 14;  text-label-position-tolerance: 0;  text-fill: #5e3a02;  text-halo-fill: #FFF;  text-halo-radius: 1;  text-dy: 0;  text-allow-overlap: true;  text-placement: point;  text-placement-type: dummy;}'
+		}]
 	  })
 	    .addTo(map)
 	    .done(function(layer) {
