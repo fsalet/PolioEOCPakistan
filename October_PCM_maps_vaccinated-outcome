@@ -45,8 +45,8 @@
 	  }
 	  #choropleth_selector {
         position: absolute;
-        top: 110px;
-        left: 20px;
+        top: 20px;
+        right: 220px;
         padding: 0;
       }
       #choropleth_selector ul {
@@ -55,7 +55,7 @@
       }
       #choropleth_selector li {
         border-bottom: 1px solid #999;
-        padding: 5px 10px;
+        padding: 15px 30px;
         font-family: "Helvetica", Arial;
         font-size: 13px;
         color: #444;
@@ -76,6 +76,7 @@
     <div id="map"></div>
     <div id="layer_selector" class="cartodb-infobox">
       <ul>
+	    <li data="" class="unselectable"><b>SELECT REGION</b></li>
         <li data="all" class="selected">All provinces</li>
         <li data="AJK">AJK</li>
         <li data="Baluchistan">Baluchistan</li>
@@ -85,12 +86,12 @@
         <li data="KPK">KPK</li>
         <li data="Punjab">Punjab</li>
         <li data="SINDH">SINDH</li>
-
       </ul>
     </div>
 
 	<div id="choropleth_selector" class="cartodb-infobox">
 	  <ul>
+	    <li data="" class="unselectable"><b>SELECT INDICATOR</b></li>
 		<li data="vacc_on_recall_perc_cat">Vaccinated [recall %]</li>
 		<li data="vacc_fm_perc_cat">Vaccinated [fingermarked %]</li>
 		<li data="bcg_fm_perc_cat">Vaccinated [bcg scar %]</li>
@@ -100,7 +101,7 @@
     <!-- include cartodb.js library -->
     <script src="http://libs.cartocdn.com/cartodb.js/v3/3.15/cartodb.js"></script>
 	<script src='https://code.jquery.com/jquery-1.11.0.min.js'></script>
-
+	
     <script>
       function main() {
 	  
@@ -187,7 +188,7 @@
 			console.log("District inforamtion" + data);
 	      });
 	      // show infowindows on click
-	      cdb.vis.Vis.addInfowindow(map, layer.getSubLayer(0), ['cartodb_id','vacc_on_recall_perc', 'vacc_on_recall_no']);
+	      cdb.vis.Vis.addInfowindow(map, layer.getSubLayer(0), ['province', 'district','vacc_on_recall_perc', 'vacc_on_recall_no', 'vacc_fm_perc_cat', 'vacc_fm_perc_no', 'bcg_fm_perc_cat', 'bcg_fm_perc_no']);
 		  createAreaSelector(layer.getSubLayer(0));
 		  createIndicatorSelector(layer.getSubLayer(0));
 	    });
