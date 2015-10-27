@@ -94,7 +94,7 @@
 	    <li data="" class="unselectable"><b>SELECT INDICATOR</b></li>
 		<li data="vacc_on_recall_perc_cat">Vaccinated [recall %]</li>
 		<li data="vacc_fm_perc_cat">Vaccinated [fingermarked %]</li>
-		<li data="bcg_fm_perc_cat">Vaccinated [bcg scar %]</li>
+		<li data="vacc_bcg_perc_cat">Vaccinated [bcg scar %]</li>
 	  </ul>
 	</div>
 		
@@ -149,8 +149,8 @@
 				layer.set({cartocss: '#pcm_oct_mapping_cartotable {   polygon-opacity: 0.7;   line-color: #FFF;   line-width: 0.5;   line-opacity: 1;}#pcm_oct_mapping_cartotable[vacc_fm_perc_cat="-"] {   polygon-fill: #c3c9ce;}#pcm_oct_mapping_cartotable[vacc_fm_perc_cat="0-<60"] {   polygon-fill: #850200;}#pcm_oct_mapping_cartotable[vacc_fm_perc_cat="60-<80"] {   polygon-fill: #D6301D;}#pcm_oct_mapping_cartotable[vacc_fm_perc_cat="80-<85"] {   polygon-fill: #F84F40;}#pcm_oct_mapping_cartotable[vacc_fm_perc_cat="85-<90"] {   polygon-fill: #229A00;}#pcm_oct_mapping_cartotable[vacc_fm_perc_cat="90-<95"] {   polygon-fill: #136400;}#pcm_oct_mapping_cartotable[vacc_fm_perc_cat="95-100"] {   polygon-fill: #012700;}'
 				})
 			  };
-			  if(type == 'bcg_fm_perc_cat') {
-				layer.set({cartocss: '#pcm_oct_mapping_cartotable {   polygon-opacity: 0.7;   line-color: #FFF;   line-width: 0.5;   line-opacity: 1;}#pcm_oct_mapping_cartotable[bcg_fm_perc_cat="-"] {   polygon-fill: #c3c9ce;}#pcm_oct_mapping_cartotable[bcg_fm_perc_cat="0-<60"] {   polygon-fill: #850200;}#pcm_oct_mapping_cartotable[bcg_fm_perc_cat="60-<80"] {   polygon-fill: #D6301D;}#pcm_oct_mapping_cartotable[bcg_fm_perc_cat="80-<85"] {   polygon-fill: #F84F40;}#pcm_oct_mapping_cartotable[bcg_fm_perc_cat="85-<90"] {   polygon-fill: #229A00;}#pcm_oct_mapping_cartotable[bcg_fm_perc_cat="90-<95"] {   polygon-fill: #136400;}#pcm_oct_mapping_cartotable[bcg_fm_perc_cat="95-100"] {   polygon-fill: #012700;}'
+			  if(type == 'vacc_bcg_perc_cat') {
+				layer.set({cartocss: '#pcm_oct_mapping_cartotable {   polygon-opacity: 0.7;   line-color: #FFF;   line-width: 0.5;   line-opacity: 1;}#pcm_oct_mapping_cartotable[vacc_bcg_perc_cat="-"] {   polygon-fill: #c3c9ce;}#pcm_oct_mapping_cartotable[vacc_bcg_perc_cat="0-<60"] {   polygon-fill: #850200;}#pcm_oct_mapping_cartotable[vacc_bcg_perc_cat="60-<80"] {   polygon-fill: #D6301D;}#pcm_oct_mapping_cartotable[vacc_bcg_perc_cat="80-<85"] {   polygon-fill: #F84F40;}#pcm_oct_mapping_cartotable[vacc_bcg_perc_cat="85-<90"] {   polygon-fill: #229A00;}#pcm_oct_mapping_cartotable[vacc_bcg_perc_cat="90-<95"] {   polygon-fill: #136400;}#pcm_oct_mapping_cartotable[vacc_bcg_perc_cat="95-100"] {   polygon-fill: #012700;}'
 				})
 			  };
 			});
@@ -188,9 +188,7 @@
 			console.log("District inforamtion" + data);
 	      });
 	      // show infowindows on click
-		  cdb.vis.Vis.addInfowindow(map, layer.getSubLayer(0), ['province','district']);
-
-	      //cdb.vis.Vis.addInfowindow(map, layer.getSubLayer(0), ['province', 'district','vacc_on_recall_perc', 'vacc_on_recall_no', 'vacc_fm_perc_cat', 'vacc_fm_perc_no', 'bcg_fm_perc_cat', 'bcg_fm_perc_no']);
+		  cdb.vis.Vis.addInfowindow(map, layer.getSubLayer(0), ['province','district','vacc_on_recall_no','vacc_on_recall_perc','vacc_fm_no','vacc_fm_perc','vacc_bcg_no','vacc_bcg_perc']);
 		  createAreaSelector(layer.getSubLayer(0));
 		  createIndicatorSelector(layer.getSubLayer(0));
 	    });
