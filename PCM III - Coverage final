@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>PCM IV</title>
+    <title>PCM III</title>
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
     <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
     <link rel="shortcut icon" href="http://cartodb.com/assets/favicon.ico" />
@@ -36,7 +36,7 @@
       #layer_selector li.selected {
         background-color: #EEE;
       }
-	  #pcm_oct_mapping_cartotable{
+	  #pcm_iii_mapping_cartotable{
 		  polygon-fill: #FF6600;
 		  polygon-opacity: 0.7;
 		  line-color: #FFF;
@@ -94,7 +94,7 @@
 	    <li data="" class="unselectable"><b>SELECT INDICATOR</b></li>
 		<li data="vacc_on_recall_perc_cat">Vaccinated [recall %]</li>
 		<li data="vacc_fm_perc_cat">Vaccinated [fingermarked %]</li>
-		<li data="vacc_bcg_perc_cat">Vaccinated [bcg scar %]</li>
+		<li data="bcg_fm_perc_cat">Vaccinated [bcg scar %]</li>
 	  </ul>
 	</div>
 		
@@ -117,9 +117,9 @@
           $options.removeClass('selected');
           $li.addClass('selected');
           // create query based on data from the layer
-          var query = "select * from pcm_oct_mapping_cartotable";
+          var query = "select * from pcm_iii_mapping_cartotable";
           if(area !== 'all') {
-            query = "SELECT * FROM pcm_oct_mapping_cartotable WHERE UPPER(who_prov) = UPPER('" + area + "')";
+            query = "SELECT * FROM pcm_iii_mapping_cartotable WHERE UPPER(who_prov) = UPPER('" + area + "')";
           }
           // change the query in the layer to update the map
           layer.setSQL(query);
@@ -142,15 +142,15 @@
 			  $li.addClass('selected');
 			  // create query based on data from the layer
 			  if(type == 'vacc_on_recall_perc_cat') {
-				layer.set({cartocss: '#pcm_oct_mapping_cartotable {   polygon-opacity: 0.7;   line-color: #FFF;   line-width: 0.5;   line-opacity: 1;}#pcm_oct_mapping_cartotable[vacc_on_recall_perc_cat="-"] {   polygon-fill: #c3c9ce;}#pcm_oct_mapping_cartotable[vacc_on_recall_perc_cat="0-<60"] {   polygon-fill: #850200;}#pcm_oct_mapping_cartotable[vacc_on_recall_perc_cat="60-<80"] {   polygon-fill: #D6301D;}#pcm_oct_mapping_cartotable[vacc_on_recall_perc_cat="80-<85"] {   polygon-fill: #F84F40;}#pcm_oct_mapping_cartotable[vacc_on_recall_perc_cat="85-<90"] {   polygon-fill: #229A00;}#pcm_oct_mapping_cartotable[vacc_on_recall_perc_cat="90-<95"] {   polygon-fill: #136400;}#pcm_oct_mapping_cartotable[vacc_on_recall_perc_cat="95-100"] {   polygon-fill: #012700;}'
+				layer.set({cartocss: '#pcm_iii_mapping_cartotable {   polygon-opacity: 0.7;   line-color: #FFF;   line-width: 0.5;   line-opacity: 1;}#pcm_iii_mapping_cartotable[vacc_on_recall_perc_cat="-"] {   polygon-fill: #c3c9ce;}#pcm_iii_mapping_cartotable[vacc_on_recall_perc_cat="0-<60"] {   polygon-fill: #850200;}#pcm_iii_mapping_cartotable[vacc_on_recall_perc_cat="60-<80"] {   polygon-fill: #D6301D;}#pcm_iii_mapping_cartotable[vacc_on_recall_perc_cat="80-<85"] {   polygon-fill: #F84F40;}#pcm_iii_mapping_cartotable[vacc_on_recall_perc_cat="85-<90"] {   polygon-fill: #229A00;}#pcm_iii_mapping_cartotable[vacc_on_recall_perc_cat="90-<95"] {   polygon-fill: #136400;}#pcm_iii_mapping_cartotable[vacc_on_recall_perc_cat="95-100"] {   polygon-fill: #012700;}'
 				})
 			  };
 			  if(type == 'vacc_fm_perc_cat') {
-				layer.set({cartocss: '#pcm_oct_mapping_cartotable {   polygon-opacity: 0.7;   line-color: #FFF;   line-width: 0.5;   line-opacity: 1;}#pcm_oct_mapping_cartotable[vacc_fm_perc_cat="-"] {   polygon-fill: #c3c9ce;}#pcm_oct_mapping_cartotable[vacc_fm_perc_cat="0-<60"] {   polygon-fill: #850200;}#pcm_oct_mapping_cartotable[vacc_fm_perc_cat="60-<80"] {   polygon-fill: #D6301D;}#pcm_oct_mapping_cartotable[vacc_fm_perc_cat="80-<85"] {   polygon-fill: #F84F40;}#pcm_oct_mapping_cartotable[vacc_fm_perc_cat="85-<90"] {   polygon-fill: #229A00;}#pcm_oct_mapping_cartotable[vacc_fm_perc_cat="90-<95"] {   polygon-fill: #136400;}#pcm_oct_mapping_cartotable[vacc_fm_perc_cat="95-100"] {   polygon-fill: #012700;}'
+				layer.set({cartocss: '#pcm_iii_mapping_cartotable {   polygon-opacity: 0.7;   line-color: #FFF;   line-width: 0.5;   line-opacity: 1;}#pcm_iii_mapping_cartotable[vacc_fm_perc_cat="-"] {   polygon-fill: #c3c9ce;}#pcm_iii_mapping_cartotable[vacc_fm_perc_cat="0-<60"] {   polygon-fill: #850200;}#pcm_iii_mapping_cartotable[vacc_fm_perc_cat="60-<80"] {   polygon-fill: #D6301D;}#pcm_iii_mapping_cartotable[vacc_fm_perc_cat="80-<85"] {   polygon-fill: #F84F40;}#pcm_iii_mapping_cartotable[vacc_fm_perc_cat="85-<90"] {   polygon-fill: #229A00;}#pcm_iii_mapping_cartotable[vacc_fm_perc_cat="90-<95"] {   polygon-fill: #136400;}#pcm_iii_mapping_cartotable[vacc_fm_perc_cat="95-100"] {   polygon-fill: #012700;}'
 				})
 			  };
-			  if(type == 'vacc_bcg_perc_cat') {
-				layer.set({cartocss: '#pcm_oct_mapping_cartotable {   polygon-opacity: 0.7;   line-color: #FFF;   line-width: 0.5;   line-opacity: 1;}#pcm_oct_mapping_cartotable[vacc_bcg_perc_cat="-"] {   polygon-fill: #c3c9ce;}#pcm_oct_mapping_cartotable[vacc_bcg_perc_cat="0-<60"] {   polygon-fill: #850200;}#pcm_oct_mapping_cartotable[vacc_bcg_perc_cat="60-<80"] {   polygon-fill: #D6301D;}#pcm_oct_mapping_cartotable[vacc_bcg_perc_cat="80-<85"] {   polygon-fill: #F84F40;}#pcm_oct_mapping_cartotable[vacc_bcg_perc_cat="85-<90"] {   polygon-fill: #229A00;}#pcm_oct_mapping_cartotable[vacc_bcg_perc_cat="90-<95"] {   polygon-fill: #136400;}#pcm_oct_mapping_cartotable[vacc_bcg_perc_cat="95-100"] {   polygon-fill: #012700;}'
+			  if(type == 'bcg_fm_perc_cat') {
+				layer.set({cartocss: '#pcm_iii_mapping_cartotable {   polygon-opacity: 0.7;   line-color: #FFF;   line-width: 0.5;   line-opacity: 1;}#pcm_iii_mapping_cartotable[bcg_fm_perc_cat="-"] {   polygon-fill: #c3c9ce;}#pcm_iii_mapping_cartotable[bcg_fm_perc_cat="0-<60"] {   polygon-fill: #850200;}#pcm_iii_mapping_cartotable[bcg_fm_perc_cat="60-<80"] {   polygon-fill: #D6301D;}#pcm_iii_mapping_cartotable[bcg_fm_perc_cat="80-<85"] {   polygon-fill: #F84F40;}#pcm_iii_mapping_cartotable[bcg_fm_perc_cat="85-<90"] {   polygon-fill: #229A00;}#pcm_iii_mapping_cartotable[bcg_fm_perc_cat="90-<95"] {   polygon-fill: #136400;}#pcm_iii_mapping_cartotable[bcg_fm_perc_cat="95-100"] {   polygon-fill: #012700;}'
 				})
 			  };
 			});
@@ -175,8 +175,8 @@
 	  user_name: 'franksalet',
 	  type: 'cartodb',
 	  sublayers: [{
-		sql: "SELECT * FROM pcm_oct_mapping_cartotable",
-		cartocss: '#pcm_oct_mapping_cartotable{  polygon-fill: #d3ccc8;  polygon-opacity: 0.7;  line-color: #FFF;  line-width: 0.5;  line-opacity: 1;}'
+		sql: "SELECT * FROM pcm_iii_mapping_cartotable",
+		cartocss: '#pcm_iii_mapping_cartotable{  polygon-fill: #d3ccc8;  polygon-opacity: 0.7;  line-color: #FFF;  line-width: 0.5;  line-opacity: 1;}'
 	    },{
 		sql: "SELECT * FROM pak_adm1_eoc_20151021",
 		cartocss: '#pak_adm1_eoc_20151021{  polygon-fill: #FF6600;  polygon-opacity: 0;  line-color: #5e3a02;  line-width: 2;  line-opacity: 1;}#pak_adm1_eoc_20151021::labels {  text-name: [province];  text-face-name: "DejaVu Sans Book";  text-size: 14;  text-label-position-tolerance: 0;  text-fill: #5e3a02;  text-halo-fill: #FFF;  text-halo-radius: 1;  text-dy: 0;  text-allow-overlap: true;  text-placement: point;  text-placement-type: dummy;}'
@@ -185,13 +185,6 @@
 	    .addTo(map)
 	    .done(function(layer) {
 	      layer.getSubLayer(0).setInteraction(true);
-	      // on mouseover
-	      layer.getSubLayer(0).on('featureOver', function(e, latlng, pos, data, subLayerIndex) {
-	        // print data to console log	
-			console.log("District inforamtion" + data);
-	      });
-	      // show infowindows on click
-		  cdb.vis.Vis.addInfowindow(map, layer.getSubLayer(0), ['province','district','vacc_on_recall_no','vacc_on_recall_perc','vacc_fm_no','vacc_fm_perc','vacc_bcg_no','vacc_bcg_perc']);
 		  createAreaSelector(layer.getSubLayer(0));
 		  createIndicatorSelector(layer.getSubLayer(0));
 	    });
