@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>PCM V</title>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <link rel="shortcut icon" href="http://cartodb.com/assets/favicon.ico" />
+    <style>
+      html, body, #map {
+        height: 100%;
+        padding: 0;
+        margin: 0;
+      }
+      #layer_selector {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        padding: 0;
+      }
+      #layer_selector ul {
+        padding: 0; margin: 0;
+        list-style-type: none;
+      }
+      #layer_selector li {
+        border-bottom: 1px solid #999;
+        padding: 15px 30px;
+        font-family: "Helvetica", Arial;
+        font-size: 13px;
+        color: #444;
+        cursor: auto;
+      }
+      #layer_selector li:hover {
+        background-color: #F0F0F0;
+        cursor: pointer;
+      }
+      #layer_selector li.selected {
+        background-color: #EEE;
+      }
+	  #pcm_nov_mapping_cartotable{
+		  polygon-fill: #FF6600;
+		  polygon-opacity: 0.7;
+		  line-color: #FFF;
+		  line-width: 0.5;
+		  line-opacity: 1;
+	  }
+	  #choropleth_selector {
+        position: absolute;
+        top: 20px;
+        right: 220px;
+        padding: 0;
+      }
+      #choropleth_selector ul {
+        padding: 0; margin: 0;
+        list-style-type: none;
+      }
+      #choropleth_selector li {
+        border-bottom: 1px solid #999;
+        padding: 15px 30px;
+        font-family: "Helvetica", Arial;
+        font-size: 13px;
+        color: #444;
+        cursor: auto;
+      }
+      #choropleth_selector li:hover {
+        background-color: #F0F0F0;
+        cursor: pointer;
+      }
+      #choropleth_selector li.selected {
+        background-color: #EEE;
+      }
+    </style>
+
+    <link rel="stylesheet" href="http://libs.cartocdn.com/cartodb.js/v3/3.15/themes/css/cartodb.css" />
+  </head>
+  <body>
+    <div id="map"></div>
+    <div id="layer_selector" class="cartodb-infobox">
+      <ul>
+	    <li data="" class="unselectable"><b>SELECT REGION</b></li>
+        <li data="all" class="selected">All provinces</li>
+        <li data="AJK">AJK</li>
+        <li data="Baluchistan">Baluchistan</li>
+        <li data="FATA">FATA</li>
+        <li data="GB">GB</li>
+        <li data="ISLAMABAD">ISLAMABAD</li>
+        <li data="KPK">KPK</li>
+        <li data="Punjab">Punjab</li>
+        <li data="SINDH">SINDH</li>
+      </ul>
+    </div>
+
+	<div id="choropleth_selector" class="cartodb-infobox">
+	  <ul>
+	    <li data="" class="unselectable"><b>SELECT INDICATOR</b></li>
+		<li data="vacc_fm_perc_cat">Vaccinated [fingermarked %]</li>
+		<li data="vacc_on_recall_perc_cat">Vaccinated [recall %]</li>
+		<li data="vacc_bcg_perc_cat">Vaccinated [bcg scar %]</li>
+	  </ul>
+	</div>
+		
+    <!-- include cartodb.js library -->
+    <script src="http://libs.cartocdn.com/cartodb.js/v3/3.15/cartodb.js"></script>
+	<script src='https://code.jquery.com/jquery-1.11.0.min.js'></script>
+	
+    <script>
+      function main() {
+	  
+      // create layer area selector
+      function createAreaSelector(layer) {
+        var sql = new cartodb.SQL({ user: 'franksalet' });
+        var $options = $('#layer_selector li');
+        $options.click(function(e) {
+          // get the area of the selected layer
+          var $li = $(e.target);
+          var area = $li.attr('data');
+          // deselect all and select the clicked one
+          $options.removeClass('selected');
+          $li.addClass('selected');
+          // create query based on data from the layer
+          var query = "select * from pcm_nov_mapping_cartotable where who_dist not in ('*SOUTH WAZIRISTAN AGENCY','KHIGADAP','*KHYBER AGENCY','*NORTH WAZIRISTAN AGENCY','KHIBALDIA','*TRIBAL AREA ADJ BANNU DISTRICT','*KILLA ABDULLAH DISTRICT','*PISHIN DISTRICT','*QUETTA DISTRICT','*BANNU DISTRICT','*TANK DISTRICT','*PESHAWAR DISTRICT')";
+          if(area !== 'all') {
+            query = "SELECT * FROM pcm_nov_mapping_cartotable WHERE UPPER(who_prov) = UPPER('" + area + "') and who_dist not in ('*SOUTH WAZIRISTAN AGENCY','KHIGADAP','*KHYBER AGENCY','*NORTH WAZIRISTAN AGENCY','KHIBALDIA','*TRIBAL AREA ADJ BANNU DISTRICT','*KILLA ABDULLAH DISTRICT','*PISHIN DISTRICT','*QUETTA DISTRICT','*BANNU DISTRICT','*TANK DISTRICT','*PESHAWAR DISTRICT')";
+          }
+          // change the query in the layer to update the map
+          layer.setSQL(query);
+		  // update the map view extent
+		  var queryBounds = sql.getBounds(query).done(function(bounds) {
+				map.fitBounds(bounds);
+		  }); 
+        });
+      }	  
+	  
+      // create layer indicator selector
+      function createIndicatorSelector(layer) {
+		var $options = $('#choropleth_selector li');
+		$options.click(function(e) {
+			  // get the choropleth type
+			  var $li = $(e.target);
+			  var type = $li.attr('data');
+			  // deselect all and select the clicked one
+			  $options.removeClass('selected');
+			  $li.addClass('selected');
+			  // create query based on data from the layer
+			  if(type == 'vacc_on_recall_perc_cat') {
+				layer.set({cartocss: '#pcm_nov_mapping_cartotable {   polygon-opacity: 0.7;   line-color: #FFF;   line-width: 0.5;   line-opacity: 1;}#pcm_nov_mapping_cartotable[vacc_on_recall_perc_cat="-"] {   polygon-fill: #c3c9ce;}#pcm_nov_mapping_cartotable[vacc_on_recall_perc_cat="0-<60"] {   polygon-fill: #850200;}#pcm_nov_mapping_cartotable[vacc_on_recall_perc_cat="60-<80"] {   polygon-fill: #D6301D;}#pcm_nov_mapping_cartotable[vacc_on_recall_perc_cat="80-<85"] {   polygon-fill: #F84F40;}#pcm_nov_mapping_cartotable[vacc_on_recall_perc_cat="85-<90"] {   polygon-fill: #229A00;}#pcm_nov_mapping_cartotable[vacc_on_recall_perc_cat="90-<95"] {   polygon-fill: #136400;}#pcm_nov_mapping_cartotable[vacc_on_recall_perc_cat="95-100"] {   polygon-fill: #012700;}'
+				})
+			  };
+			  if(type == 'vacc_fm_perc_cat') {
+				layer.set({cartocss: '#pcm_nov_mapping_cartotable {   polygon-opacity: 0.7;   line-color: #FFF;   line-width: 0.5;   line-opacity: 1;}#pcm_nov_mapping_cartotable[vacc_fm_perc_cat="-"] {   polygon-fill: #c3c9ce;}#pcm_nov_mapping_cartotable[vacc_fm_perc_cat="0-<60"] {   polygon-fill: #850200;}#pcm_nov_mapping_cartotable[vacc_fm_perc_cat="60-<80"] {   polygon-fill: #D6301D;}#pcm_nov_mapping_cartotable[vacc_fm_perc_cat="80-<85"] {   polygon-fill: #F84F40;}#pcm_nov_mapping_cartotable[vacc_fm_perc_cat="85-<90"] {   polygon-fill: #229A00;}#pcm_nov_mapping_cartotable[vacc_fm_perc_cat="90-<95"] {   polygon-fill: #136400;}#pcm_nov_mapping_cartotable[vacc_fm_perc_cat="95-100"] {   polygon-fill: #012700;}'
+				})
+			  };
+			  if(type == 'vacc_bcg_perc_cat') {
+				layer.set({cartocss: '#pcm_nov_mapping_cartotable {   polygon-opacity: 0.7;   line-color: #FFF;   line-width: 0.5;   line-opacity: 1;}#pcm_nov_mapping_cartotable[vacc_bcg_perc_cat="-"] {   polygon-fill: #c3c9ce;}#pcm_nov_mapping_cartotable[vacc_bcg_perc_cat="0-<60"] {   polygon-fill: #850200;}#pcm_nov_mapping_cartotable[vacc_bcg_perc_cat="60-<80"] {   polygon-fill: #D6301D;}#pcm_nov_mapping_cartotable[vacc_bcg_perc_cat="80-<85"] {   polygon-fill: #F84F40;}#pcm_nov_mapping_cartotable[vacc_bcg_perc_cat="85-<90"] {   polygon-fill: #229A00;}#pcm_nov_mapping_cartotable[vacc_bcg_perc_cat="90-<95"] {   polygon-fill: #136400;}#pcm_nov_mapping_cartotable[vacc_bcg_perc_cat="95-100"] {   polygon-fill: #012700;}'
+				})
+			  };
+			});
+      }
+	  
+	  // create leaflet map
+	  var map = L.map('map', { 
+	    zoomControl: false,
+	    scrollWheelZoom: false,
+	    center: [30, 69],
+	    zoomControl: true,
+	    zoom: 6
+	   });
+	   
+	  // add a base layer
+	  L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
+      attribution: 'MapBox'
+	  }).addTo(map);
+	  
+	  // add cartodb layer with one sublayer
+	  cartodb.createLayer(map, {
+	  user_name: 'franksalet',
+	  type: 'cartodb',
+	  sublayers: [{
+		sql: "SELECT * FROM pcm_nov_mapping_cartotable where who_dist not in ('*SOUTH WAZIRISTAN AGENCY','KHIGADAP','*KHYBER AGENCY','*NORTH WAZIRISTAN AGENCY','KHIBALDIA','*TRIBAL AREA ADJ BANNU DISTRICT','*KILLA ABDULLAH DISTRICT','*PISHIN DISTRICT','*QUETTA DISTRICT','*BANNU DISTRICT','*TANK DISTRICT','*PESHAWAR DISTRICT')",
+		cartocss: '#pcm_nov_mapping_cartotable{  polygon-fill: #d3ccc8;  polygon-opacity: 0.7;  line-color: #FFF;  line-width: 0.5;  line-opacity: 1;}'
+	    },{
+		sql: "SELECT * FROM pak_adm1_eoc_20151021",
+		cartocss: '#pak_adm1_eoc_20151021{  polygon-fill: #FF6600;  polygon-opacity: 0;  line-color: #5e3a02;  line-width: 2;  line-opacity: 1;}#pak_adm1_eoc_20151021::labels {  text-name: [province];  text-face-name: "DejaVu Sans Book";  text-size: 14;  text-label-position-tolerance: 0;  text-fill: #5e3a02;  text-halo-fill: #FFF;  text-halo-radius: 1;  text-dy: 0;  text-allow-overlap: true;  text-placement: point;  text-placement-type: dummy;}'
+		}]
+	  })
+	    .addTo(map)
+	    .done(function(layer) {
+	      layer.getSubLayer(0).setInteraction(true);
+	      // on mouseover
+	      layer.getSubLayer(0).on('featureOver', function(e, latlng, pos, data, subLayerIndex) {
+	        // print data to console log	
+			console.log("District inforamtion" + data);
+	      });
+	      // show infowindows on click
+		  cdb.vis.Vis.addInfowindow(map, layer.getSubLayer(0), ['province','district','vacc_on_recall_no','vacc_on_recall_perc','vacc_fm_no','vacc_fm_perc','vacc_bcg_no','vacc_bcg_perc']);
+		  createAreaSelector(layer.getSubLayer(0));
+		  createIndicatorSelector(layer.getSubLayer(0));
+	    });
+		
+		// creating legends and add legend to map
+		var legendCallType = new cdb.geo.ui.Legend({
+           type: "custom",
+           data: [
+				{ name: "No data", value: "#c3c9ce" },
+				{ name: "Below 60%", value: "#850200" },
+				{ name: "Between 60% and 80%", value: "#D6301D" },
+				{ name: "Between 80% and 85%", value: "#F84F40" },
+				{ name: "Between 85% and 90%", value: "#229A00" },
+				{ name: "Between 90% and 95%", value: "#136400" },
+				{ name: "Above 95%", value: "#012700" }
+           ]
+		});
+		var stackedLegend = new cdb.geo.ui.StackedLegend({
+           legends: [legendCallType]
+         }); 
+        $('#map').append(stackedLegend.render().el);
+		
+      }
+      window.onload = main;
+    </script>
+  </body>
+</html>
