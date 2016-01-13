@@ -58,7 +58,7 @@
               range: true,
               min: min,
               max: max,
-              values: [ min , max ],
+              values: [ new Date(2015, 1, 1) , max ],
               change: function(event, ui) {
                 // give feedback to the user on slide change
                 changeLegend(ui.values[0], ui.values[1]);
