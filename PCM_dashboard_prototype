@@ -1,0 +1,38 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>PCM - Results</title>
+<script src="http://code.jquery.com/jquery-1.8.2.js"></script>
+</head>
+<script>
+	var url = "https://spreadsheets.google.com/feeds/list/1r7Kr-Y0GpxeyxJMxeUuGOHamb1Krj61FZ7wHVZMcIFI/od6/public/values?alt=json";
+ 
+	$.getJSON(url, function(data) {	 
+	  var entry = data.feed.entry;	 
+	  $(entry).each(function(){
+		$('.results').prepend('<li><a href="'+this.gsx$urlresults.$t+'" onclick="changeEmbedding(this);return false;">' + this.gsx$campaignname.$t);
+	  });	  
+	});
+
+	function changeEmbedding(whichcampaign){
+	  var source=whichcampaign.getAttribute("href");
+	  var campaign=document.getElementById("embeddedFrame");
+	  var clone=campaign.cloneNode(true);
+	  clone.setAttribute('src',source);
+	  campaign.parentNode.replaceChild(clone,campaign)
+	}
+</script>
+<body>
+<h1>Independent Third-party Post-Campaign Monitoring</H1>
+
+Select a campaign:
+<ol>
+<div class="results"></div> 
+</ol>
+
+<embed id="embeddedFrame" width=100% height=600 src="https://docs.google.com/spreadsheets/d/17hU6iUuLL6jfi7uzEbk2Fz7BZzwdsjUuAuUMNUTfkzo/pubhtml?widget=true&amp;headers=false"></iframe>
+
+</body>
+</html>
